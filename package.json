@@ -1,0 +1,21 @@
+{
+  "name": "marketmesh",
+  "private": true,
+  "workspaces": [
+    "web"
+  ],
+  "scripts": {
+    "predev": "node scripts/check-ports.mjs",
+    "stop:dev": "node scripts/stop-dev.mjs",
+    "dev": "concurrently -n api,web -c blue,green \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:web": "npm run dev -w web",
+    "dev:api": "node scripts/dev-api.mjs",
+    "setup:api": "node scripts/setup-api.mjs",
+    "build": "npm run build -w web",
+    "lint": "npm run lint -w web",
+    "preview": "npm run preview -w web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

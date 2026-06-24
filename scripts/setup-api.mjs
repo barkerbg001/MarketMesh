@@ -32,4 +32,7 @@ if (!existsSync(venvPython)) {
 console.log('Installing API dependencies...')
 run(venvPip, ['install', '-r', 'requirements.txt'], { cwd: apiDir })
 
+console.log('Installing Playwright Chromium for Takealot scraping...')
+run(venvPython, ['-m', 'playwright', 'install', 'chromium'], { cwd: apiDir })
+
 console.log('API setup complete.')

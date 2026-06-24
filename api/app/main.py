@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.routers import health, search
+from app.routers import health, scraper, search
 
 app = FastAPI(title=settings.app_name, debug=settings.debug)
 
@@ -16,6 +16,7 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api")
 app.include_router(search.router, prefix="/api")
+app.include_router(scraper.router, prefix="/api")
 
 
 @app.get("/")

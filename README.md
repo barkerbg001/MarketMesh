@@ -13,7 +13,7 @@ MarketMesh/
 ## Agent roadmap
 
 - [x] Search Agent
-- [ ] Scraper Agent (Takealot only)
+- [x] Scraper Agent (Takealot only)
 - [ ] Product Matching Agent
 - [ ] Recommendation Agent
 - [ ] Master Orchestrator
@@ -105,6 +105,7 @@ Optional API config via `api/.env`:
 ```env
 OPEN_ROUTER_API_KEY=your-openrouter-api-key
 OPEN_ROUTER_MODEL=openai/gpt-4o-mini
+PLAYWRIGHT_HEADLESS=false
 DEBUG=true
 CORS_ORIGINS=["http://localhost:5173"]
 ```
@@ -112,3 +113,17 @@ CORS_ORIGINS=["http://localhost:5173"]
 ### Search agent
 
 `POST /api/agent/search` accepts `{ "query": "..." }` and uses OpenRouter plus web search to return an answer with sources.
+
+### Scraper agent (Takealot only)
+
+`POST /api/agent/scrape` accepts `{ "query": "..." }` and uses Playwright to scrape takealot.com only.
+
+Example:
+
+```bash
+curl -X POST http://localhost:8000/api/agent/scrape \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"Find gaming laptops under R20000 on Takealot\"}"
+```
+
+After pulling scraper changes, run `npm run setup:api` once to install Playwright Chromium.

@@ -13,7 +13,10 @@ MarketMesh/
 ## Agent roadmap
 
 - [x] Search Agent
-- [x] Scraper Agent (Takealot only)
+- [x] Scraper Agent — Takealot
+- [x] Scraper Agent — Checkers
+- [x] Scraper Agent — Woolworths
+- [x] Scraper Agent — Pick n Pay
 - [ ] Product Matching Agent
 - [ ] Recommendation Agent
 - [ ] Master Orchestrator
@@ -114,16 +117,42 @@ CORS_ORIGINS=["http://localhost:5173"]
 
 `POST /api/agent/search` accepts `{ "query": "..." }` and uses OpenRouter plus web search to return an answer with sources.
 
-### Scraper agent (Takealot only)
+### Scraper agents
 
-`POST /api/agent/scrape` accepts `{ "query": "..." }` and uses Playwright to scrape takealot.com only.
+Both use Playwright to scrape a single retailer. The browser is visible by default (`PLAYWRIGHT_HEADLESS=false`).
 
-Example:
+**Takealot** — `POST /api/agent/scrape/takealot`
 
 ```bash
-curl -X POST http://localhost:8000/api/agent/scrape \
+curl -X POST http://localhost:8000/api/agent/scrape/takealot \
   -H "Content-Type: application/json" \
   -d "{\"query\":\"Find gaming laptops under R20000 on Takealot\"}"
 ```
+
+**Checkers** — `POST /api/agent/scrape/checkers`
+
+```bash
+curl -X POST http://localhost:8000/api/agent/scrape/checkers \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"Search Checkers for full cream milk\"}"
+```
+
+**Woolworths** — `POST /api/agent/scrape/woolworths`
+
+```bash
+curl -X POST http://localhost:8000/api/agent/scrape/woolworths \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"Search Woolworths for full cream milk\"}"
+```
+
+**Pick n Pay** — `POST /api/agent/scrape/picknpay`
+
+```bash
+curl -X POST http://localhost:8000/api/agent/scrape/picknpay \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"Search Pick n Pay for full cream milk\"}"
+```
+
+`POST /api/agent/scrape` is deprecated and aliases Takealot.
 
 After pulling scraper changes, run `npm run setup:api` once to install Playwright Chromium.

@@ -1,12 +1,17 @@
 from pydantic import BaseModel, Field
 
 
-class TakealotProduct(BaseModel):
+class ScrapedProduct(BaseModel):
     title: str
     price: str | None = None
     url: str
+    retailer: str
     rating: str | None = None
     in_stock: bool | None = None
+
+
+# Backwards-compatible alias
+TakealotProduct = ScrapedProduct
 
 
 class ScraperAgentRequest(BaseModel):
@@ -15,5 +20,5 @@ class ScraperAgentRequest(BaseModel):
 
 class ScraperAgentResponse(BaseModel):
     answer: str
-    products: list[TakealotProduct]
+    products: list[ScrapedProduct]
     actions: list[str]

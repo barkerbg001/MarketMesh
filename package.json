@@ -4,6 +4,9 @@
   "workspaces": [
     "web"
   ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "predev": "node scripts/check-ports.mjs",
     "stop:dev": "node scripts/stop-dev.mjs",
@@ -11,11 +14,22 @@
     "dev:web": "npm run dev -w web",
     "dev:api": "node scripts/dev-api.mjs",
     "setup:api": "node scripts/setup-api.mjs",
+    "migrate:api": "node scripts/manage.mjs migrate",
+    "test:api": "node scripts/manage.mjs test",
+    "test:web": "npm run test -w web",
+    "test": "npm run test:api && npm run test:web",
+    "manage": "node scripts/manage.mjs",
     "build": "npm run build -w web",
     "lint": "npm run lint -w web",
+    "typecheck": "npm run typecheck -w web",
     "preview": "npm run preview -w web"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^10.0.5"
+  },
+  "overrides": {
+    "concurrently": {
+      "shell-quote": "^1.12.0"
+    }
   }
 }

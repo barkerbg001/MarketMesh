@@ -12,6 +12,21 @@ venv/
 .mypy_cache/
 .ruff_cache/
 
+# Django (migrations are committed; data, uploads, and build output are not)
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+*.db
+api/backups/
+api/media/
+api/staticfiles/
+api/scripts/*.html
+
+# Server-managed encryption key for saved API keys (never commit)
+api/.secrets/
+*.key
+
 # Build output
 dist/
 dist-ssr/

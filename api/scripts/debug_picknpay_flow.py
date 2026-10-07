@@ -1,8 +1,9 @@
 import asyncio
 
+import _bootstrap  # noqa: F401
 from bs4 import BeautifulSoup
 
-from app.tools.browser import run_search_flow
+from retailers.browser import run_search_flow
 
 PNP_HOME = "https://www.pnp.co.za/"
 

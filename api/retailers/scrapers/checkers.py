@@ -3,8 +3,10 @@ from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from app.schemas.scraper import ScrapedProduct
-from app.tools.browser import fetch_page_html, run_search_flow
+from core.types import ScrapedProduct
+from retailers.browser import fetch_page_html, run_search_flow
+from retailers.errors import ScraperError
+from retailers.scrapers import extract_image_url
 
 CHECKERS_HOME = "https://www.checkers.co.za/"
 CHECKERS_DOMAINS = ("checkers.co.za", "www.checkers.co.za", "products.checkers.co.za")
@@ -12,7 +14,7 @@ PRODUCT_PATH_PATTERN = re.compile(r"/p/\d+EA|/product/[^\"'\s]+?\d+EA", re.IGNOR
 PRICE_PATTERN = re.compile(r"R\s?[\d\s,]+(?:\.\d{2})?")
 
 
-class CheckersScraperError(Exception):
+class CheckersScraperError(ScraperError):
     pass
 
 
@@ -75,6 +77,7 @@ def _parse_search_results(html: str, max_results: int) -> list[ScrapedProduct]:
                 price=_extract_price(container_text),
                 url=url,
                 retailer="checkers",
+                image_url=extract_image_url(container, url),
             )
         )
         seen_urls.add(url)

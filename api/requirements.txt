@@ -1,8 +1,13 @@
-fastapi>=0.115.0
-uvicorn[standard]>=0.32.0
-pydantic-settings>=2.6.0
-httpx>=0.28.0
-ddgs>=9.0.0
-playwright>=1.49.0
-beautifulsoup4>=4.12.0
-lxml>=5.0.0
+Django>=6.1,<6.2
+djangorestframework>=3.18,<3.19
+django-cors-headers>=4.9,<5
+django-environ>=0.14,<0.15
+drf-spectacular>=0.30,<0.31
+whitenoise>=6.12,<7
+gunicorn>=26.2,<27; sys_platform != "win32"
+httpx>=0.28,<0.29
+ddgs>=9.16,<10
+playwright>=1.63,<2
+beautifulsoup4>=4.15,<5
+lxml>=6.1,<7
+cryptography>=50,<51

@@ -3,8 +3,10 @@ from urllib.parse import quote_plus, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from app.schemas.scraper import ScrapedProduct
-from app.tools.browser import fetch_page_html
+from core.types import ScrapedProduct
+from retailers.browser import fetch_page_html
+from retailers.errors import ScraperError
+from retailers.scrapers import extract_image_url
 
 TAKEALOT_BASE = "https://www.takealot.com"
 TAKEALOT_DOMAIN = "takealot.com"
@@ -12,7 +14,7 @@ PLID_PATTERN = re.compile(r"/PLID\d+")
 PRICE_PATTERN = re.compile(r"R\s?[\d\s,]+(?:\.\d{2})?")
 
 
-class TakealotScraperError(Exception):
+class TakealotScraperError(ScraperError):
     pass
 
 
@@ -70,6 +72,7 @@ def _parse_search_results(html: str, max_results: int) -> list[ScrapedProduct]:
                 price=_extract_price(container_text),
                 url=url,
                 retailer="takealot",
+                image_url=extract_image_url(container, TAKEALOT_BASE),
             )
         )
         seen_urls.add(url)

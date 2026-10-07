@@ -3,8 +3,10 @@ from urllib.parse import quote, urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from app.schemas.scraper import ScrapedProduct
-from app.tools.browser import fetch_page_html
+from core.types import ScrapedProduct
+from retailers.browser import fetch_page_html
+from retailers.errors import ScraperError
+from retailers.scrapers import extract_image_url
 
 PNP_HOME = "https://www.pnp.co.za/"
 PNP_DOMAINS = ("pnp.co.za", "www.pnp.co.za", "picknpay.co.za", "www.picknpay.co.za")
@@ -12,7 +14,7 @@ PRODUCT_PATH_PATTERN = re.compile(r"/p/\d+_\w{2}\b", re.IGNORECASE)
 PRICE_PATTERN = re.compile(r"R\s?[\d\s,]+(?:\.\d{2})?")
 
 
-class PicknPayScraperError(Exception):
+class PicknPayScraperError(ScraperError):
     pass
 
 
@@ -88,6 +90,7 @@ def _parse_search_results(html: str, max_results: int) -> list[ScrapedProduct]:
                 price=_extract_price(container.get_text(" ", strip=True)),
                 url=url,
                 retailer="picknpay",
+                image_url=extract_image_url(container, url),
             )
         )
         seen_urls.add(url)

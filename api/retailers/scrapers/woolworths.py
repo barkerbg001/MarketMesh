@@ -3,8 +3,10 @@ from urllib.parse import urljoin, urlparse
 
 from bs4 import BeautifulSoup
 
-from app.schemas.scraper import ScrapedProduct
-from app.tools.browser import fetch_page_html, run_search_flow
+from core.types import ScrapedProduct
+from retailers.browser import fetch_page_html, run_search_flow
+from retailers.errors import ScraperError
+from retailers.scrapers import extract_image_url
 
 WOOLWORTHS_HOME = "https://www.woolworths.co.za/"
 WOOLWORTHS_BASE = "https://www.woolworths.co.za"
@@ -13,7 +15,7 @@ PRODUCT_ID_PATTERN = re.compile(r"/A-(\d+)")
 PRICE_PATTERN = re.compile(r"R\s?[\d\s,]+(?:\.\d{2})?")
 
 
-class WoolworthsScraperError(Exception):
+class WoolworthsScraperError(ScraperError):
     pass
 
 
@@ -67,6 +69,7 @@ def _parse_search_results(html: str, max_results: int) -> list[ScrapedProduct]:
                 price=price,
                 url=product_url_for_id(product_id),
                 retailer="woolworths",
+                image_url=extract_image_url(article, product_url_for_id(product_id)),
             )
         )
         seen_ids.add(product_id)

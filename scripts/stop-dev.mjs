@@ -38,10 +38,11 @@ function getPidsOnPortUnix(port) {
   }
 }
 
-function getProjectUvicornPidsWindows() {
+// Django's autoreloader runs a parent and a child `manage.py runserver` process.
+function getProjectRunserverPidsWindows() {
   try {
     const output = execSync(
-      `powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter \\"Name='python.exe'\\" | Where-Object { $_.CommandLine -like '*uvicorn*' -and $_.CommandLine -like '*${projectRoot}*' } | Select-Object -ExpandProperty ProcessId"`,
+      `powershell -NoProfile -Command "Get-CimInstance Win32_Process -Filter \\"Name='python.exe'\\" | Where-Object { $_.CommandLine -like '*manage.py*runserver*' -and ($_.CommandLine -like '*${projectRoot}*' -or $_.ExecutablePath -like '*${projectRoot}*') } | Select-Object -ExpandProperty ProcessId"`,
       { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] },
     )
     return output
@@ -90,8 +91,8 @@ function stopPid(pid, reason) {
 }
 
 if (process.platform === 'win32') {
-  for (const pid of getProjectUvicornPidsWindows()) {
-    stopPid(pid, 'uvicorn')
+  for (const pid of getProjectRunserverPidsWindows()) {
+    stopPid(pid, 'django runserver')
   }
   for (const pid of getProjectVitePidsWindows()) {
     stopPid(pid, 'vite')

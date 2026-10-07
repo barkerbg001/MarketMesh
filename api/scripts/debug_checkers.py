@@ -1,7 +1,9 @@
 import asyncio
 
-from app.tools.browser import run_search_flow
-from app.tools.checkers_scraper import _parse_search_results
+import _bootstrap  # noqa: F401
+
+from retailers.browser import run_search_flow
+from retailers.scrapers.checkers import _parse_search_results
 
 
 async def main() -> None:

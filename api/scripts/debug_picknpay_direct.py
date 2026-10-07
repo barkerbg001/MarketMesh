@@ -1,10 +1,10 @@
 import asyncio
 from urllib.parse import quote
 
+import _bootstrap  # noqa: F401
 from bs4 import BeautifulSoup
+from django.conf import settings
 from playwright.async_api import async_playwright
-
-from app.core.config import settings
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -16,7 +16,7 @@ USER_AGENT = (
 async def main() -> None:
     url = f"https://www.pnp.co.za/search/{quote('milk')}"
     async with async_playwright() as playwright:
-        browser = await playwright.chromium.launch(headless=settings.playwright_headless)
+        browser = await playwright.chromium.launch(headless=settings.PLAYWRIGHT_HEADLESS)
         page = await browser.new_page(user_agent=USER_AGENT, locale="en-ZA")
         await page.goto("https://www.pnp.co.za/", wait_until="domcontentloaded", timeout=45_000)
         await page.wait_for_timeout(1000)

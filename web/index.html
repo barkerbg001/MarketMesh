@@ -4,7 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Research products and markets with a team of AI agents, compare options, and keep a shortlist." />
     <title>MarketMesh</title>
+    <script>
+      // Applies theme and appearance before first paint to avoid a flash.
+      // Keep in sync with next-themes (storageKey "marketmesh-theme") and src/lib/appearance.ts.
+      try {
+        const root = document.documentElement
+        const stored = localStorage.getItem('marketmesh-theme')
+        const dark =
+          stored === 'dark' ||
+          ((!stored || stored === 'system') && matchMedia('(prefers-color-scheme: dark)').matches)
+        root.classList.add(dark ? 'dark' : 'light')
+        root.style.colorScheme = dark ? 'dark' : 'light'
+        const prefs = JSON.parse(localStorage.getItem('marketmesh-appearance') || '{}') || {}
+        const allowed = {
+          accent: ['indigo', 'blue', 'teal', 'green', 'amber', 'rose'],
+          textSize: ['sm', 'md', 'lg'],
+          density: ['comfortable', 'compact'],
+        }
+        root.dataset.accent = allowed.accent.includes(prefs.accent) ? prefs.accent : 'indigo'
+        root.dataset.textSize = allowed.textSize.includes(prefs.textSize) ? prefs.textSize : 'md'
+        root.dataset.density = allowed.density.includes(prefs.density) ? prefs.density : 'comfortable'
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
